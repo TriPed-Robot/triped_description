@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="triped">
+<!--Material definitions-->
+  <material name="chassis">
+    <color rgba="0 1 0 0.8" />
+  </material>
+  
+  <material name="connector">
+    <color rgba="0 0 1 0.8" />
+  </material>
+  
+  <material name="gear">
+    <color rgba="1 0 0 0.8" />
+  </material>
+  
+  <material name="leg">
+    <color rgba="1 1 0 0.8" />
+  </material>
+  
+<!--Part description chassis-->
+  <xacro:property name="chassis_length" value="0.1" />
+  <xacro:property name="chassis_radius" value="0.5" />
+  
+  <link name="chassis">
+    <visual>
+      <geometry>
+        <cylinder length="${chassis_length}" radius="${chassis_radius}" />
+      </geometry>
+      <material name="chassis" />
+    </visual>
+  </link>
+
+<!--Macro for adding a leg-->
+  <xacro:macro name="connect_leg" params="rotation_around_chassis leg_postfix">
+  <!--Part description connector-->
+    <xacro:property name="connector_length" value="${chassis_length}" />
+    <xacro:property name="connector_0_width" value="0.2" />
+    <xacro:property name="connector_3_width" value="0.2" />
+    <xacro:property name="connector_depth" value="${chassis_length}" />  
+    <xacro:property name="connector_radius" value="${chassis_length/2}" />
+
+    <link name="connector_0_${leg_postfix}">
+      <visual>
+        <geometry>
+          <box size="${connector_0_width} ${connector_depth} ${connector_length}" />
+        </geometry>
+        <origin xyz="${connector_0_width/2} 0 0" rpy="0 0 0" />
+        <material name="connector" />
+      </visual>
+    </link>
+    
+    <link name="connector_1_${leg_postfix}">
+      <visual>
+        <geometry>
+          <cylinder length="${connector_length}" radius="${connector_radius}" />
+        </geometry>
+        <origin xyz="${-connector_radius} 0 0" rpy="0 0 0" />
+        <material name="connector" />
+      </visual>
+    </link>
+    
+    <link name="connector_2_${leg_postfix}">
+      <visual>
+        <geometry>
+          <cylinder length="${connector_length}" radius="${connector_radius}" />
+        </geometry>
+        <origin xyz="${connector_radius} 0 0" rpy="0 0 0" />
+        <material name="connector" />
+      </visual>
+    </link>
+    
+    <link name="connector_3_${leg_postfix}">
+      <visual>
+        <geometry>
+          <box size="${connector_3_width} ${connector_depth} ${connector_length}" />
+        </geometry>
+        <origin xyz="${connector_3_width/2} 0 0" rpy="0 0 0" />
+        <material name="connector" />
+      </visual>
+    </link>
+    
+    <joint name="connector_0_1_${leg_postfix}" type="fixed">
+      <parent link="connector_0_${leg_postfix}" />
+      <child link="connector_1_${leg_postfix}" />
+      <origin xyz="${connector_0_width + connector_radius} 0 0" rpy="0 0 0" />
+    </joint>
+    
+    <joint name="connector_1_2_${leg_postfix}" type="revolute">
+      <parent link="connector_1_${leg_postfix}" />
+      <child link="connector_2_${leg_postfix}" />
+      <axis xyz="0 0 1" />
+      <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+    
+    <joint name="connector_2_3_${leg_postfix}" type="fixed">
+      <parent link="connector_2_${leg_postfix}" />
+      <child link="connector_3_${leg_postfix}" />
+      <origin xyz="${connector_radius} 0 0" rpy="0 0 0" />
+    </joint>
+    
+  <!--Part description leg-->
+    <xacro:property name="virtual_joint_distance" value="0.5" />
+    <xacro:property name="leg_length" value="1" />
+    <xacro:property name="leg_width" value="${connector_length}" />
+    <xacro:property name="leg_depth" value="${connector_depth}" />
+    
+    <link name="leg_${leg_postfix}">
+      <visual>
+        <geometry>
+          <box size="${leg_width} ${leg_depth} ${leg_length}" />
+        </geometry>
+        <origin xyz="${-virtual_joint_distance/2} 0 0" rpy="0 0 0" />
+        <material name="leg" />
+      </visual>
+    </link>
+
+  <!--Relation between parts-->
+    <joint name="chassis_connector_${leg_postfix}" type="fixed">
+      <parent link="chassis" />
+      <child link="connector_0_${leg_postfix}" />
+      <origin xyz="${chassis_radius*cos(rotation_around_chassis)} ${chassis_radius*sin(rotation_around_chassis)} 0" rpy="0 0 ${rotation_around_chassis}" />
+    </joint>
+
+    <joint name="connector_leg_${leg_postfix}" type="revolute">
+      <parent link="connector_3_${leg_postfix}" />
+      <child link="leg_${leg_postfix}" />
+      <axis xyz="0 1 0"/>
+      <limit effort="1000.0" lower="${-pi/2*1/3}" upper="${pi/2*1/3}" velocity="0.5"/>
+      <origin xyz="${connector_3_width + virtual_joint_distance} 0 0" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+
+<!--Definition of legs-->
+  <xacro:connect_leg rotation_around_chassis="${2*pi*0/3}" leg_postfix="0"/>
+  <xacro:connect_leg rotation_around_chassis="${2*pi*1/3}" leg_postfix="1"/>
+  <xacro:connect_leg rotation_around_chassis="${2*pi*2/3}" leg_postfix="2"/>
+</robot>

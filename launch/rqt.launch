@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Start rqt with perspective imported. -->
+  <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find triped_description)/rqt/command_publisher.perspective" />
+</launch>
