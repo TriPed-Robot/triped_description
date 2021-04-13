@@ -6,7 +6,7 @@
   <link name="swing_right" />
   <link name="extend" />
   
-  <joint name="swing_joint_left" type="revolute">
+  <joint name="swing/left/joint" type="revolute">
     <parent link="chassis" />
     <child link="swing_left" />
     <axis xyz="0 0 1" />
@@ -14,7 +14,7 @@
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
   
-  <joint name="swing_joint_right" type="revolute">
+  <joint name="swing/right/joint" type="revolute">
     <parent link="chassis" />
     <child link="swing_right" />
     <axis xyz="0 0 1" />
@@ -22,7 +22,7 @@
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
 
-  <joint name="extend_joint" type="revolute">
+  <joint name="extend/joint" type="revolute">
     <parent link="chassis" />
     <child link="extend" />
     <axis xyz="0 0 1" />
