@@ -15,7 +15,7 @@ Execute:
 ### TriPed-GUI in rqt
 On a different terminal execute:
 `./rqt/rqt-bbb-as-master.sh` if you are using the Beaglebone, or `rqt` if you are using a simulation.
-
+Load the TriPed-GUI perspective file into rviz.  
 Start the joint_level_controller on the BeagleBone or use a Simulation of the TriPed.
 
 ## Some views of the TriPed GUI
