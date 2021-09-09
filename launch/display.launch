@@ -1,0 +1,17 @@
+<launch>
+
+  <arg name="model" default="$(find triped_rqt)/urdf/TriPed.xacro"/>
+  <arg name="gui" default="true" />
+  <arg name="rvizconfig" default="$(find triped_rqt)/rviz/urdf.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+  <param name="use_gui" value="$(arg gui)"/>
+
+  <!-- publishes the /joint_states topic. with names & pos of all nonstatic joints-->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <!-- this creates the transforms for rviz using the model, in: /joint_states topic, out /tf, /tf_static topics-->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <!-- visualizes the robot using model & /tf(_static)--> 
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+</launch>

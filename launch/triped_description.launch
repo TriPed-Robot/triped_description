@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <!-- Load URDF as robot_description parameter. -->
-  <param name="robot_description" command="xacro '$(find triped_description)/urdf/triped.urdf.xacro'" />
-</launch>
