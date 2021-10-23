@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <!-- Start rviz with assigned config file. -->
-  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find triped_description)/rviz/config.rviz" />
-</launch>

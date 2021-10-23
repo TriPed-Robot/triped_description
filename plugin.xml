@@ -1,0 +1,10 @@
+<library path ="src">
+    <class name="triped_package" type="triped_package.module.plugin" base_class_type="rqt_gui_py::Plugin">
+        <description> A python GUI plugin for the triped </description>
+        <qtgui>
+            <label>The python triped_package for an rqt plugin</label>
+            <icon type="theme">system-help</icon>
+            <statustip>The plugin for the triped</statustip>
+        </qtgui>
+    </class>
+</library>
